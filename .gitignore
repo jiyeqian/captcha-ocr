@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# uv / 虚拟环境
+.venv/
+
+# 测试/缓存
+.pytest_cache/
+.ruff_cache/
+
+# 运行期产生的临时/调试文件
+.tmp/
+debug/
+*.tmp
+
+# 系统
+.DS_Store
