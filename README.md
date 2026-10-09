@@ -1,5 +1,10 @@
 # captcha-ocr
 
+[![CI](https://github.com/jiyeqian/captcha-ocr/actions/workflows/ci.yml/badge.svg)](https://github.com/jiyeqian/captcha-ocr/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](#环境要求)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![version](https://img.shields.io/badge/version-0.1.0-orange.svg)]()
+
 对「带噪声的图形验证码」做 OCR 识别。目标场景：**白底 + 彩色字形 + 彩色噪点/干扰线 + 少量浅色字**。
 
 它**不是**一个魔法模型，而是把三件事串成流水线，并在其上做**多策略投票**以提高稳定性：
