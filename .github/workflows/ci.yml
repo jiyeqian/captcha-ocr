@@ -37,9 +37,7 @@ jobs:
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
         with:
-          # 让 captcha-ocr 命令行在后续 step 可用
           enable-cache: true
-          activate-extras: "dev"
 
       - name: Show versions
         run: |
