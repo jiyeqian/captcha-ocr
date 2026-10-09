@@ -15,7 +15,8 @@ import argparse
 import csv
 import os
 import sys
-from typing import Sequence, TextIO
+from collections.abc import Sequence
+from typing import TextIO
 
 from . import __version__
 from .config import default_config
@@ -66,7 +67,7 @@ def _parse_args(raw: Sequence[str], parser: argparse.ArgumentParser) -> tuple[st
     return cmd, ns
 
 
-def _make_config(ns: argparse.Namespace) -> "object":
+def _make_config(ns: argparse.Namespace) -> object:
     cfg = default_config()
     length = getattr(ns, "expected_lengths", None) or getattr(ns, "length", 4)
     cfg.expected_length = int(length)

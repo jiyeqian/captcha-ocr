@@ -28,8 +28,7 @@ class Candidate:
     count: int = 0
 
     def __post_init__(self) -> None:
-        if self.count < 0:
-            self.count = 0
+        self.count = max(self.count, 0)
 
 
 def vote(

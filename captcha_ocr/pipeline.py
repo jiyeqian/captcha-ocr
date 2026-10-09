@@ -33,13 +33,13 @@ class Recognition:
         return head + (f"  其它候选: {alt}" if alt else "")
 
 
-def _load_image(source: "str | Image.Image") -> "Image.Image | None":
+def _load_image(source: str | Image.Image) -> Image.Image | None:
     if isinstance(source, str):
         return Image.open(source)
     return source
 
 
-def recognize(image: "Image.Image | str", config: Config | None = None) -> Recognition:
+def recognize(image: Image.Image | str, config: Config | None = None) -> Recognition:
     """识别一张验证码图(文件路径或已打开的 PIL.Image)。
 
     返回 Recognition；若某参数点全部识别失败，text 可能为空字符串。

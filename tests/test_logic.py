@@ -1,7 +1,7 @@
 """预处理单元与逻辑测试(不依赖 tesseract / numpy)。"""
 from PIL import Image
 
-from captcha_ocr.config import Config, OcrParam, default_config
+from captcha_ocr.config import OcrParam, default_config
 from captcha_ocr.postprocess import apply_forced_confusions, clean_alnum, vote
 from captcha_ocr.preprocess import _denoise, luminance_to_mask, preprocess
 

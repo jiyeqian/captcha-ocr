@@ -11,19 +11,19 @@ Public API:
     for c in result.candidates: # 其它候选及次数
         print(c.text, c.count)
 """
-from .config import Config, default_config, OcrParam
-from .pipeline import Recognition, recognize, recognize_file
+from .config import Config, OcrParam, default_config
 from .errors import TesseractNotFoundError
+from .pipeline import Recognition, recognize, recognize_file
 
 __version__ = "0.1.0"
 
 __all__ = [
     "Config",
-    "default_config",
     "OcrParam",
     "Recognition",
-    "recognize",
-    "recognize_file",
     "TesseractNotFoundError",
     "__version__",
+    "default_config",
+    "recognize",
+    "recognize_file",
 ]

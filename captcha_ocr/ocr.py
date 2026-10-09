@@ -10,7 +10,6 @@ import os
 import shutil
 import subprocess
 import tempfile
-from typing import Sequence
 
 from PIL import Image
 
@@ -51,7 +50,7 @@ class TesseractClient:
         if self.whitelist:
             args += ["-c", f"tessedit_char_whitelist={self.whitelist}"]
         try:
-            proc = subprocess.run(args, capture_output=True, text=False)
+            proc = subprocess.run(args, capture_output=True, text=False, check=False)
         except OSError as exc:
             raise TesseractNotFoundError(str(exc)) from exc
         return proc.stdout.decode("utf-8", "ignore").replace(" ", "").strip()

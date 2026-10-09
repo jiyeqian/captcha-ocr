@@ -25,11 +25,12 @@ def fast_cfg() -> Config:
 
 def _tesseract_available() -> bool:
     try:
+        from captcha_ocr.errors import TesseractNotFoundError
         from captcha_ocr.ocr import resolve_tesseract
 
         resolve_tesseract("tesseract")
         return True
-    except Exception:
+    except TesseractNotFoundError:
         return False
 
 

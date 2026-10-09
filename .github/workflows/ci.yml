@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# 同一分支的并发只跑最新的
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: "test · py${{ matrix.python }} · ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python: ["3.10", "3.11", "3.12", "3.13"]
+    env:
+      # 用矩阵指定的 Python 解释器(via UV_PYTHON 覆盖 .python-version)
+      UV_PYTHON: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # 安装 Tesseract 引擎(端到端测试依赖;无则 e2e 会自动 skip)
+      - name: Install Tesseract
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          # 让 captcha-ocr 命令行在后续 step 可用
+          enable-cache: true
+          activate-extras: "dev"
+
+      - name: Show versions
+        run: |
+          echo "== python ==" && python --version
+          echo "== uv ==" && uv --version
+          echo "== tesseract ==" && (tesseract --version 2>&1 | head -1 || echo "tesseract not found")
+
+      - name: Sync dependencies
+        run: uv sync --all-extras
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Run tests (pytest)
+        run: uv run pytest
+
+  build:
+    name: "build wheel · ubuntu"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Build distribution artifacts
+        run: uv build
+      - name: Inspect package metadata
+        run: |
+          python - <<'PY'
+          import glob, zipfile, sys
+          whls = sorted(glob.glob("dist/*.whl"))[-1]
+          z = zipfile.ZipFile(whls)
+          names = z.namelist()
+          # 校验入口脚本存在
+          ep = [n for n in names if "entry_points" in n]
+          assert ep, "wheel 缺少 entry_points"
+          print("wheel:", whls)
+          print("entry_points file:", ep)
+          sys.exit(0)
+          PY
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/*

@@ -5,8 +5,7 @@
 """
 from __future__ import annotations
 
-import itertools
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 
 # 形近字纠正：tesseract 在验证码字体上常见的误读 → 正确值。
 # 仅对「几乎总是误读」的字符做强制纠正，避免误伤。
@@ -96,14 +95,14 @@ class Config:
         out: list[OcrParam] = []
         for thr in self.thresholds:
             for factor in self.min_area_factors:
-                area_filter = max(self.min_area_floor, int(round(area * factor)))
+                area_filter = max(self.min_area_floor, round(area * factor))
                 for scale in scales:
                     for psm in self.psms:
                         out.append(
                             OcrParam(
-                                threshold=int(thr),
-                                min_area=int(area_filter),
-                                scale=int(scale),
+                                threshold=thr,
+                                min_area=area_filter,
+                                scale=scale,
                                 psm=int(psm),
                             )
                         )
